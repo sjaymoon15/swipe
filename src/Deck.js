@@ -5,16 +5,18 @@ class Deck extends Component {
   constructor(props) {
     super(props);
 
+    const position = new Animated.ValueXY();
     const panResponder = PanResponder.create({
       //any time user tabs or press down on screen
       //should pR in charge of handling the action? true or false
       onStartShouldSetPanResponder: () => true,
       onPanResponderMove: (event, gesture) => {
-        console.log(gesture);
+        position.setValue({ x: gesture.dx, y: gesture.dy })
       },
       onPanResponderRelease: () => {}
     });
-    this.state = { panResponder };
+    // this.position = position;
+    this.state = { panResponder, position };
   }
 
   renderCards() {
@@ -24,9 +26,12 @@ class Deck extends Component {
   }
   render() {
     return (
-      <View {...this.state.panResponder.panHandlers}>
+      <Animated.View 
+        style={this.state.position.getLayout()}
+        {...this.state.panResponder.panHandlers}
+        >
         {this.renderCards()}
-      </View>
+      </Animated.View>
     );
   }
 }
