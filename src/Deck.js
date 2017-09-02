@@ -20,16 +20,24 @@ class Deck extends Component {
       onPanResponderMove: (event, gesture) => {
         position.setValue({ x: gesture.dx, y: gesture.dy })
       },
-      onPanResponderRelease: () => {}
+      onPanResponderRelease: () => {
+        this.resetPosition();
+      }
     });
     // this.position = position;
     this.state = { panResponder, position };
   }
 
+  resetPosition() {
+    Animated.spring(this.state.position, {
+      toValue: { x: 0, y: 0}
+    }).start();
+  }
+
   getCardStyle() {
     const { position } = this.state;
     const rotate = position.x.interpolate({
-      inputRange: [-SCREEN_WIDTH, 0, SCREEN_WIDTH],
+      inputRange: [-SCREEN_WIDTH * 1.5, 0, SCREEN_WIDTH * 1.5],
       outputRange: ['-120deg', '0deg', '120deg']
     })
     return { 
